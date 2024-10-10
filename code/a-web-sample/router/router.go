@@ -2,6 +2,7 @@ package router
 
 import (
 	"a-web-sample/controllers"
+	"a-web-sample/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,6 +19,13 @@ func SetupRouter() *gin.Engine {
 	{
 		auth.POST("/login", controllers.Login)
 		auth.POST("/register", controllers.Register)
+	}
+
+	api := r.Group("/api")
+	api.GET("/exchangeRates", controllers.GetExchangeRates)
+	api.Use(middleware.AuthMiddleWare())
+	{
+		api.POST("/exchangeRates", controllers.CreateExchangeRate)
 	}
 	return r
 }

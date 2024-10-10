@@ -98,3 +98,4 @@ func Login(ctx *gin.Context) {
 		"token": token,
 	})
 }
+
