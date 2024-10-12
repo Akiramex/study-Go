@@ -3,17 +3,32 @@ package router
 import (
 	"a-web-sample/controllers"
 	"a-web-sample/middleware"
+	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func SetupRouter() *gin.Engine {
 
 	// 禁用控制台颜色
-	// gin.DisableConsoleColor()
+	//gin.DisableConsoleColor()
 
 	// 使用默认中间件（logger 和 recovery 中间件）创建 gin 路由
 	r := gin.Default()
+
+	// 跨域设置
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:5173"},
+		AllowMethods:     []string{"GET", "POST", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		//AllowOriginFunc: func(origin string) bool {
+		//	return origin == "https://github.com"
+		//},
+		MaxAge: 12 * time.Hour,
+	}))
 
 	auth := r.Group("/api/auth")
 	{
@@ -26,6 +41,13 @@ func SetupRouter() *gin.Engine {
 	api.Use(middleware.AuthMiddleWare())
 	{
 		api.POST("/exchangeRates", controllers.CreateExchangeRate)
+
+		api.POST("/articles", controllers.CreateArticle)
+		api.GET("/articles", controllers.GetArticles)
+		api.GET("/articles/:id", controllers.GetArticleById)
+
+		api.POST("/articles/:id/like", controllers.LikeArticle)
+		api.GET("/articles/:id/like", controllers.GetArticleLikes)
 	}
 	return r
 }

@@ -18,6 +18,11 @@ type Config struct {
 		Password string
 		Name     string
 	}
+	Redis struct {
+		Addr     string
+		Db       int
+		Password string
+	}
 }
 
 var AppConfig *Config
@@ -43,4 +48,5 @@ func InitConfig() {
 
 	// 初始化数据库
 	InitDB()
+	InitRedis()
 }

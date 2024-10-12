@@ -1,5 +1,6 @@
 app:
   name: CurrencyExchangeApp
+  port: :5000
 
 database:
   host: localhost
@@ -7,3 +8,8 @@ database:
   user: postgres
   password: admin
   name: go_web
+
+redis:
+  addr: localhost:6379
+  db: 0
+  password: 
